@@ -1,0 +1,19 @@
+{
+  "name": "rocket-news-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "pouchdb-adapter-http": "^6.4.1",
+    "pouchdb-adapter-node-websql": "^6.4.1",
+    "pouchdb-replication": "^6.4.1",
+    "rxdb": "^7.3.0",
+    "rxjs": "^5.5.6"
+  }
+}
