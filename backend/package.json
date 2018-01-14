@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "google-news-feed": "0.0.1",
+    "js-sha3": "^0.7.0",
     "pouchdb-adapter-http": "^6.4.1",
     "pouchdb-adapter-node-websql": "^6.4.1",
     "pouchdb-replication": "^6.4.1",

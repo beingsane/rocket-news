@@ -4,6 +4,10 @@ module.exports  = {
     version: 0,
     type: 'object',
     properties: {
+        id: {
+          type: 'string',
+          primary: true
+        },
         platform: {
             type: 'string',
             index: true
