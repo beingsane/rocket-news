@@ -7,15 +7,19 @@ function calcIntervalInMinutes(lastCrawlTime) {
 }
 
 async function storeNews(news, DB) {
+  if(!news) return;
   news.forEach(async(n) => {
     try{
-      await DB.news.insert(n).exec();
+      await DB.news.insert(n);
     } catch (err) {
-
+      console.dir(err);
     }
   });
-  const all = await DB.news.find().exec();
-  console.dir(all);
+  try {
+    const all = await DB.news.find().exec();
+  } catch(err) {
+    console.dir(err);
+  }
 }
 
 function googleNewsToNews(news, interest) {
@@ -37,13 +41,18 @@ const fetchNews = async function(DB) {
     let news;
     switch (interest.platform) {
       case 'google-news':
-        const googleNewsItems = await googleNews(interest.value);
-        news = googleNewsToNews(googleNewsItems, interest);
+        try {
+          const googleNewsItems = await googleNews(interest.value);
+          if(googleNewsItems) news = googleNewsToNews(googleNewsItems, interest);
+        } catch (err) {
+          console.dir(err);
+        }
         break;
       default:
         break;
     }
-    storeNews(news, DB);
+    console.dir(news);
+    await storeNews(news, DB);
 
   });
 };

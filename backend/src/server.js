@@ -10,7 +10,7 @@ const run = async function() {
       platform: 'google-news',
       type: 'keyword',
       lastCrawlTime: Date.now(),
-      value: 'merck kgaa'
+      value: 'cat'
     });
   } catch (err) {
 

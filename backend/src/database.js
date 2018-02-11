@@ -7,6 +7,8 @@ const interestSchema = require('./schema/interests');
 const newsSchema = require('./schema/news');
 const Database = {};
 
+const syncURL = `http://localhost:10101/`;
+
 const create = async () => {
   const database = await RxDB.create({
     name: './rocketnews',
@@ -26,6 +28,12 @@ const create = async () => {
   });
   database.news.preInsert(docData => {
     docData.id = sha(docData.interest + docData.title + docData.url + docData.date);
+  });
+  database.interests.sync({
+    remote: `${syncURL}interests/`,
+  });
+  database.news.sync({
+    remote: `${syncURL}news/`,
   });
   return database;
 };

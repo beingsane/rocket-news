@@ -21,6 +21,7 @@ const schema = {
     date: {
       type: 'number',
       min: 1514684095,
+      index: true,
     },
     text: {
       type: 'string',

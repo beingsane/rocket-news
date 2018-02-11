@@ -4,33 +4,48 @@ import { sha3_256 as sha } from 'js-sha3';
 import * as NewsSchema from './schema/news';
 import * as InterestsSchema from './schema/interests';
 
-RxDB.plugin(require('pouchdb-adapter-idb'));
-RxDB.plugin(require('pouchdb-adapter-http')); // enable syncing over http
 
 const collections = [
   {
     name: 'news',
-    schema: NewsSchema,
+    schema: NewsSchema.default,
     sync: true,
   },
   {
     name: 'interests',
-    schema: InterestsSchema,
+    schema: InterestsSchema.default,
     sync: true,
   },
 ];
 
 const syncURL = `http://${window.location.hostname}:10101/`;
 
+/* because vue-dev-server only reloads the changed code and not the whole page,
+ * we have to ensure that the same database only exists once
+ * we can either set ignoreDuplicate to true
+ * or remove the previous instance which we do here
+ */
+window.dbs = window.dbs || [];
+const clearPrev = async () => {
+  await Promise.all(
+         window.dbs
+         .map(db => db.destroy()));
+};
+
+
 let dbPromise = null;
 
-const create = async function () {
+const create = async () => {
+  RxDB.plugin(require('pouchdb-adapter-websql').default); // eslint-disable-line global-require
+  RxDB.plugin(require('pouchdb-adapter-http').default); // eslint-disable-line global-require
   console.log('DatabaseService: creating database..');
+  await clearPrev();
   const db = await RxDB.create({
-    name: 'rocket-news-db',
-    adapter: 'idb',
+    name: 'rocketnewsdb',
+    adapter: 'websql',
     password: 'myLongAndStupidPassword',
   });
+  window.dbs.push(db);
   console.log('DatabaseService: created database');
   window.db = db; // write to window for debugging
 
@@ -49,8 +64,11 @@ const create = async function () {
   });
   // sync
   console.log('DatabaseService: sync');
-  db.heroes.sync({
-    remote: `${syncURL}heroes/`,
+  db.interests.sync({
+    remote: `${syncURL}interests/`,
+  });
+  db.news.sync({
+    remote: `${syncURL}news/`,
   });
 
   return db;

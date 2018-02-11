@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./src/server.js"
+    "start:node": "node ./src/server.js",
+    "start:sync": "pouchdb-server --host 0.0.0.0 -p 10101 -m -d /tmp/pouchdb-server/ -n true",
+    "start": "concurrently \"npm run start:sync\" \"npm run start:node\""
   },
   "author": "",
   "license": "ISC",
@@ -16,7 +18,11 @@
     "pouchdb-adapter-http": "^6.4.1",
     "pouchdb-adapter-node-websql": "^6.4.1",
     "pouchdb-replication": "^6.4.1",
+    "pouchdb-server": "^4.0.0",
     "rxdb": "^7.3.0",
     "rxjs": "^5.5.6"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1"
   }
 }

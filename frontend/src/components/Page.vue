@@ -1,4 +1,4 @@
- run <template>
+ <template>
   <div class="page-container">
     <md-app md-mode="reveal">
       <md-app-toolbar class="md-primary">
@@ -35,10 +35,16 @@
         </md-list>
       </md-app-drawer>
       <md-app-content>
-        <news :title="'Postive Signale von Sondierungen zwischen Union und SPD'"
-              :source="'t-online'" :time="'4h'" :interest="'google-news'"></news>
-        <news :title="'30 Amazing Vue.js Open Source Projects for the Past Year (v.2018).'"
+        <news v-for="article in results"
+          :title="article.title"
+          :source="'asdf'"
+          :time="article.date"
+        >
+
+        </news>
+      <!--  <news :title="'30 Amazing Vue.js Open Source Projects for the Past Year (v.2018).'"
               :source="'user'" :time="'6h'" :interest="'twitter'"></news>
+            -->
       </md-app-content>
       <div>
         <md-button class="md-fab md-primary">
@@ -71,14 +77,32 @@
 
 <script>
 import News from './News';
+import Database from '../database/database';
 
 export default {
   name: 'page',
   data: () => ({
     menuVisible: false,
+    results: [],
+    subs: [],
   }),
   components: {
     News,
   },
+  created: async() => {
+    this.db = await Database();
+    this.db.news
+      .find()
+      .sort('date')
+      .limit(10)
+      .$.subscribe(results => {
+        console.dir(results.map(d => d.toJSON()));
+        this.results = results;
+      });
+    /*
+    this.subs.push(
+    );
+     */
+  }
 };
 </script>
